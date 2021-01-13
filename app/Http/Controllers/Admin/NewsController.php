@@ -11,6 +11,8 @@ use App\History;
 
 use Carbon\Carbon;
 
+use Storage;
+
 class NewsController extends Controller
 {
     //
@@ -27,8 +29,8 @@ class NewsController extends Controller
     $form = $request->all();
     //　フォームから画像が送信されてきたら、保存して、＄news->image_path に画像のパスを保存する
     if (isset($form['image'])) {
-      $path = $request->file('image')->store('public/image');
-      $news->image_path = basename($path);
+      $path = Storage::disk('s3')->putFile('/',$form['image'],'public');
+      $news->image_path = Storage::disk('s3')->url($path);
     } else  {
         $news->image_path = null;
     }
@@ -70,23 +72,26 @@ class NewsController extends Controller
     public function update(Request $request)
     {
     //Validationをかける
-    $this->validate($request,News::$rules);
-    //News Modelからデータを取得する
-    $news = News::find($request->id);
-    //送信されてきたフォームデータを格納する
-    $news_form = $request->all();
-  
-        unset($news_form['_token']);
-    
-    //該当するデータを上書きして保存する
-    $news->fill($news_form)->save();
-    
-    $history = new History;
-    $history->news_id = $news->id;
-    $history->edited_at = Carbon::now();
-    $history->save();
-    
-        return redirect('admin/news/');
+   $this->validate($request, News::$rules);
+      // News Modelからデータを取得する
+      $news = News::find($request->id);
+      // 送信されてきたフォームデータを格納する
+      $news_form = $request->all();
+      if ($request->remove == 'true') {
+          $news_form['image_path'] = null;
+      } elseif ($request->file('image')) {
+          $path = Storage::disk('s3')->putFile('/',$form['image'],'public');
+          $news->image_path = Storage::disk('s3')->url($path);
+      } else {
+          $news_form['image_path'] = $news->image_path;
+      }
+
+      unset($news_form['image']);
+      unset($news_form['remove']);
+      unset($news_form['_token']);
+      // 該当するデータを上書きして保存する
+      $news->fill($news_form)->save();
+      return redirect('admin/news');
     }
     
     public function delete(Request $request)
