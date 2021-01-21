@@ -24,7 +24,12 @@ Route::group(['prefix' => 'admin'], function() {
     Route::get('news/edit','Admin\NewsController@edit')->middleware('auth');
     Route::post('news/edit','Admin\NewsController@update')->middleware('auth');
     Route::get('news/delete','Admin\NewsController@delete')->middleware('auth');
-    
+    Route::get('practice/create', 'Admin\PracticeController@add')->middleware('auth');
+    Route::post('practice/create', 'Admin\PracticesController@create')->middleware('auth');
+    Route::get('practice', 'Admin\PracticeController@index')->middleware('auth');
+    Route::get('practice/edit','Admin\PracticeController@edit')->middleware('auth'); 
+    Route::post('practice/edit', 'Admin\PracticeController@update')->middleware('auth'); 
+    Route::get('practice/delete', 'Admin\PracticeController@delete')->middleware('auth');
 });
 //課題３//
 Route::get('XXX','AAAController@bbb');
@@ -44,10 +49,12 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'],function() {
     Route::post('news/create','Admin\NewsController@create');
     Route::post('profile/create','Admin\ProfileController@create');
     Route::post('profile/edit','Admin\ProfileController@update');
+    Route::get('practice/create','Admin\PracticeController@add');
+    Route::post('practice/create', 'Admin\PracticeController@create');
 });
 
  Route::get('/','NewsController@index');
  Route::get('/profile','ProfileController@index');
-
+ Route::get('/practice','PracticeController@index');
 
 
