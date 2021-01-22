@@ -49,6 +49,7 @@ class NewsController extends Controller
     }
 
     public function index(Request $request)
+    
     {
     $cond_title = $request->cond_title;
     if ($cond_title != '') {

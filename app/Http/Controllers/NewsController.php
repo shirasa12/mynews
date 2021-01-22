@@ -11,7 +11,15 @@ class NewsController extends Controller
 {
     public function index(Request $request)
     {
-        $posts = News::all()->sortByDesc('updated_at');
+    // 
+        if( $request ->narabi == 'desc') {
+            $posts = News::all()->sortByDesc('updated_at');
+        }elseif( $request -> narabi == 'asc') {
+            $posts = News::all()->sortBy('updated_at');
+        } else {
+            $posts = News::all()->sortByDesc('updated_at');
+        }
+        
 
         if (count($posts) > 0) {
             $headline = $posts->shift();

@@ -4,6 +4,16 @@
     <div class="container">
         <p>テストviewsnewsindex</p>
         <hr color="#c0c0c0">
+        
+              <form action="{{ action('NewsController@index') }}"
+                method="get" enctype="multipart/form-data">
+                 <select name="narabi">
+                    <option value="asc">昇順</option>
+                    <option value="desc">降順</option>
+                 </select>
+            <input type="submit" value="並び替え" >
+         </form>
+                
         @if (!is_null($headline))
             <div class="row">
                 <div class="headline col-md-10 mx-auto">

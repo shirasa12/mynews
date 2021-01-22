@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 mx-auto">
-                <h2>練習</h2>
+                <h2>練習cr</h2>
                 <form action="{{ action('Admin\PracticeController@create') }}" method="post" enctype="multipart/form-data">
 
                     @if (count($errors) > 0)
